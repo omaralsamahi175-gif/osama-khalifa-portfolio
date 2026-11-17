@@ -1,0 +1,69 @@
+---
+title: "BuildMetrics AI"
+number: "01"
+meta: "CONTRACT · JUL 2026 TO PRESENT"
+role: "Full Stack Engineer"
+stack: "Next.js 14 · TypeScript · Supabase · Web Workers"
+summary: "Moved a construction project-controls SaaS to Next.js 14 and made its heaviest workflows fast."
+seoTitle: "BuildMetrics AI · Osama Khalifa / Case 01"
+cardMetrics: ["57 ROUTES", "~3,100-LINE DASHBOARD → MODULES", "1 ROUND TRIP"]
+metrics:
+  - ["57", "ROUTES MIGRATED"]
+  - ["~3,100", "LINE DASHBOARD → MODULES"]
+  - ["1", "CONSOLIDATED ROUND TRIP"]
+diagram: ["INTERFACE", "API BOUNDARY", "SERVER RETRIEVAL", "SUPABASE"]
+---
+
+<Section number="02" title="THE PROBLEM">
+
+A construction project-controls SaaS had outgrown its React/Vite setup. The main dashboard was a single ~3,100-line component, large bill-of-quantities (BOQ) tables froze the browser, and data loaded through a chain of sequential queries.
+
+</Section>
+
+<Section number="03" title="WHAT I BUILT">
+<Decisions>
+
+<Decision n="01" title="Move the application boundary" diagram={"57 routes → App Router → SSR auth → middleware"}>
+
+Migrated 57 routes to Next.js 14 App Router, with Supabase SSR authentication and middleware. The server owns access checks before a protected screen renders.
+
+</Decision>
+
+<Decision n="02" title="Make the dashboard understandable" diagram={"views → services → data access\n          ↘ export hooks"}>
+
+Split the ~3,100-line dashboard into modular views, calculation services and export hooks. Enforced the API/data-access boundary with strict TypeScript and ESLint.
+
+</Decision>
+
+<Decision n="03" title="Keep heavy work off the interface" diagram={"visible rows → virtual window\nexports → worker → download"}>
+
+Virtualized BOQ tables with TanStack React Virtual. Moved Excel and PDF processing into Web Workers so exports no longer compete with interface work on the main thread.
+
+</Decision>
+
+<Decision n="04" title="Retrieve data together" diagram={"sequential requests → server retrieval → 1 round trip"}>
+
+Replaced an O(N) Supabase query waterfall with consolidated server-side retrieval. The client requests the result in one round trip.
+
+</Decision>
+
+<Decision n="05" title="Put limits around AI" diagram={"request → account limit → generation → validation"}>
+
+Added grounded validation of AI-generated narratives and database-backed usage limits. Validation and account limits sit alongside the feature rather than relying on the prompt alone.
+
+</Decision>
+
+</Decisions>
+</Section>
+
+<Section number="04" title="RESULTS / KNOWN NUMBERS">
+<Metrics />
+</Section>
+
+<SystemSection />
+
+<Section number="06" title="WHAT I’D DO NEXT">
+
+I would add repeatable performance budgets around the largest BOQ datasets and export paths, and trace server retrieval separately from rendering. That would make regressions visible before users encounter them, and provide measured timings for the next iteration.
+
+</Section>

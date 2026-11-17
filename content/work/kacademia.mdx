@@ -1,0 +1,63 @@
+---
+title: "KACADEMIA"
+number: "02"
+meta: "ZAWRAQ · 2026"
+role: "Full Stack Engineer"
+stack: "Next.js · PostgreSQL · Prisma · NextAuth · RAG"
+summary: "An education platform with an AI tutor that writes questions for teachers and answers for students."
+seoTitle: "KACADEMIA · Osama Khalifa / Case 02"
+cardMetrics: ["RAG", "POSTGRESQL + PRISMA", "NEXTAUTH"]
+metrics:
+  - ["RAG", "COURSE-GROUNDED TUTOR"]
+  - ["SQL", "POSTGRESQL + PRISMA"]
+  - ["AUTH", "MIDDLEWARE PROTECTED"]
+diagram: ["COURSE CONTENT", "CHUNKS", "EMBEDDINGS", "RETRIEVAL", "GROUNDED ANSWER"]
+---
+
+<Section number="02" title="THE PROBLEM">
+
+An online education platform needed to connect teachers and students through classes while keeping course data, authentication and communication in one coherent system. The AI tutor needed to answer from course material and help teachers generate questions.
+
+</Section>
+
+<Section number="03" title="WHAT I BUILT">
+<Decisions>
+
+<Decision n="01" title="Ground the tutor in course content" diagram={"course content → chunks → embeddings\n→ retrieval → grounded answer"}>
+
+Built a RAG tutor that retrieves course context before producing answers for students or questions for teachers. The retrieval step connects the response to the material being taught.
+
+</Decision>
+
+<Decision n="02" title="Model relationships explicitly" diagram={"application → Prisma → PostgreSQL"}>
+
+Built a relational PostgreSQL schema with Prisma and deployed it on a cloud server. Typed access keeps the application aligned with its database model.
+
+</Decision>
+
+<Decision n="03" title="Protect the route boundary" diagram={"request → middleware → session → protected route"}>
+
+Used NextAuth with middleware route protection. Authentication is checked before protected platform routes are reached.
+
+</Decision>
+
+<Decision n="04" title="Complete the account lifecycle" diagram={"account event → Nodemailer → SMTP → inbox"}>
+
+Integrated transactional email through SMTP and Nodemailer for alerts, updates and password resets.
+
+</Decision>
+
+</Decisions>
+</Section>
+
+<Section number="04" title="RESULTS / KNOWN NUMBERS">
+<Metrics />
+</Section>
+
+<SystemSection />
+
+<Section number="06" title="WHAT I’D DO NEXT">
+
+I would build a small evaluation set from actual course questions and track whether retrieval found the right source material. I would also make the tutor's sources easier for students and teachers to inspect, so an answer can be checked against the lesson.
+
+</Section>

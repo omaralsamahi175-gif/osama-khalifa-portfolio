@@ -1,0 +1,14 @@
+/* Next.js-only glue. Everything visual lives in the ported stylesheets. */
+html { background: #0e0f11; -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: #0e0f11; }
+
+/* Framer applied these inline on the component root. */
+.osk { position: relative; height: auto; width: 100%; }
+
+/* Framer "Other case files" list: horizontal stack, 1fr items (min 280px), 18px gap, wrapping. */
+.osk-work-list { display: flex; flex-wrap: wrap; gap: 18px; align-items: stretch; }
+.osk-work-item { flex: 1 1 280px; min-width: 280px; display: flex; flex-direction: column; }
+.osk-work-item > .osk-case-card { flex: 1; }
+.osk-case-card { width: 100%; height: auto; }
+.osk-note { position: relative; width: 100%; height: auto; }
+

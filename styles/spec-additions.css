@@ -1,0 +1,38 @@
+/*
+ * Additions required by the build spec that the Framer version did not have.
+ * Kept apart from the verbatim Framer CSS so the original stays diffable.
+ * The Framer reduced-motion rule (`.osk *{animation:none!important}`) also disables everything here.
+ */
+
+/* §4 Summary readout: optional TEAM column. */
+.osk-case-readout.has-team { grid-template-columns: 1fr 1fr .8fr 1.3fr; }
+@media (max-width: 767px) { .osk-case-readout.has-team { grid-template-columns: 1fr; } }
+
+/* §3 Writing: read-time column, shown only once a post has a body. */
+.osk-note.osk-note-timed > div, .osk-note.osk-note-timed > a { grid-template-columns: 40px 1fr 65px 52px 20px; }
+.osk-note .note-read { font-size: 9px; color: #62625c; letter-spacing: .04em; }
+@media (hover: hover) { .osk-note > a:hover .note-read { color: #aaa; } }
+@media (max-width: 767px) {
+  .osk-note.osk-note-timed > div, .osk-note.osk-note-timed > a { grid-template-columns: 20px 1fr 40px 36px 15px; }
+  .osk-note .note-read { font-size: 7px; }
+}
+
+/* §5 Case overlay top bar types in. Ghost text reserves the final width. */
+.osk-typein { position: relative; display: inline-block; white-space: pre; }
+.osk-typein-ghost { visibility: hidden; }
+.osk-typein-text { position: absolute; left: 0; top: 0; }
+
+/* §5 Hero: callout leader re-draws (tag → marker) when the scan enters a new area. */
+@keyframes osk-leader-ltr { from { clip-path: inset(0 100% 100% 0); } to { clip-path: inset(0 0 0 0); } }
+.osk-callout svg.osk-leader-draw { animation: osk-leader-ltr .3s linear; }
+
+/* §5 Stack cards on hover: leader draws from the tag to the "+" (300ms), status dot brightens. */
+@keyframes osk-leader-rtl { from { clip-path: inset(0 0 100% 100%); } to { clip-path: inset(0 0 0 0); } }
+@media (hover: hover) and (pointer: fine) {
+  .osk-stack-card:hover .osk-glyph-scene > svg { animation: osk-leader-rtl .3s linear; }
+  .osk-stack-card:hover .osk-card-footer .osk-dot { filter: brightness(1.35) saturate(1.2); }
+}
+
+/* §5 Links inside case-study body text: underline draws from the left. */
+.osk-case-section p a { background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat; transition: background-size .2s cubic-bezier(.2, 0, 0, 1); }
+.osk-case-section p a:hover, .osk-case-section p a:focus-visible { background-size: 100% 1px; }

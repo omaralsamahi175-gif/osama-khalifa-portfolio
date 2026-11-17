@@ -1,0 +1,31 @@
+{
+  "name": "osama-khalifa-portfolio",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "dither": "node scripts/dither.mjs",
+    "predev": "node scripts/dither.mjs",
+    "prebuild": "node scripts/dither.mjs",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "framer-motion": "11.18.2",
+    "next": "14.2.35",
+    "next-mdx-remote": "5.0.0",
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "20.17.10",
+    "@types/react": "18.3.18",
+    "@types/react-dom": "18.3.5",
+    "eslint": "8.57.1",
+    "eslint-config-next": "14.2.35",
+    "sharp": "0.34.4",
+    "typescript": "5.6.3"
+  }
+}

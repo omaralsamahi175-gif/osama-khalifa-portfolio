@@ -1,0 +1,57 @@
+---
+title: "POS System"
+number: "04"
+meta: "PRODUCT BUILD · 2024"
+role: "Frontend Engineer"
+stack: "React · TypeScript · ECharts · Swiper"
+summary: "A cashier and inventory system with live sales dashboards."
+seoTitle: "POS System · Osama Khalifa / Case 04"
+cardMetrics: ["TYPESCRIPT", "ECHARTS"]
+metrics:
+  - ["TS", "TYPED INTERFACE"]
+  - ["LIVE", "SALES DASHBOARDS"]
+  - ["02", "CORE WORKFLOWS"]
+diagram: ["CASHIER", "TRANSACTIONS", "INVENTORY", "DASHBOARDS"]
+---
+
+<Section number="02" title="THE PROBLEM">
+
+A cashier and inventory system needed an interface that kept day-to-day transactions and stock information easy to navigate. Sales and inventory data also needed to be readable in dashboard form.
+
+</Section>
+
+<Section number="03" title="WHAT I BUILT">
+<Decisions>
+
+<Decision n="01" title="Type the interface" diagram={"typed data → React views → cashier workflow"}>
+
+Built the cashier and inventory interface with React and TypeScript, making the application data shapes explicit.
+
+</Decision>
+
+<Decision n="02" title="Make operational data legible" diagram={"sales + inventory → ECharts → dashboards"}>
+
+Used ECharts for sales and inventory dashboards, giving the system dedicated views for its operational data.
+
+</Decision>
+
+<Decision n="03" title="Connect the workflows" diagram={"cashier ↔ inventory ↔ sales dashboard"}>
+
+Used Swiper navigation to move between the system's views while keeping the cashier and inventory experience cohesive.
+
+</Decision>
+
+</Decisions>
+</Section>
+
+<Section number="04" title="RESULTS / KNOWN NUMBERS">
+<Metrics />
+</Section>
+
+<SystemSection />
+
+<Section number="06" title="WHAT I’D DO NEXT">
+
+I would validate the interface with cashiers during a busy shift, then address the highest-friction steps. I would also define offline and recovery behavior explicitly, so a temporary connection problem has a predictable path back to a consistent state.
+
+</Section>

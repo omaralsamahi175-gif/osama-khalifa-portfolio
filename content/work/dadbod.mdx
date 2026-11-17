@@ -1,0 +1,57 @@
+---
+title: "DADBOD"
+number: "03"
+meta: "FREELANCE · 2022"
+role: "Frontend Engineer"
+stack: "React · Redux · Responsive UI"
+summary: "A calorie and diet-planning app with TDEE and carb-cycling logic."
+seoTitle: "DADBOD · Osama Khalifa / Case 03"
+cardMetrics: ["~1,000 MONTHLY USERS", "REACT + REDUX"]
+metrics:
+  - ["~1,000", "MONTHLY USERS"]
+  - ["01", "FIRST YEAR"]
+  - ["GLOBAL", "INTERNATIONAL REACH"]
+diagram: ["USER INPUTS", "TDEE", "CALORIE TARGET", "CYCLING PLAN"]
+---
+
+<Section number="02" title="THE PROBLEM">
+
+A diet-planning application needed to turn calorie calculations into a clear daily plan on a tight deadline. Users needed a responsive experience for TDEE calculations and carb- or keto-cycling plans.
+
+</Section>
+
+<Section number="03" title="WHAT I BUILT">
+<Decisions>
+
+<Decision n="01" title="Make the calculation flow explicit" diagram={"user inputs → TDEE → calorie target → diet plan"}>
+
+Built TDEE calculation and carb/keto-cycling logic into the planning experience. Users move from their inputs to a calorie and diet plan.
+
+</Decision>
+
+<Decision n="02" title="Keep state predictable" diagram={"inputs → Redux state → calculations → views"}>
+
+Built the interface with React and Redux, keeping the plan and the user's inputs coordinated across the application.
+
+</Decision>
+
+<Decision n="03" title="Ship for small screens" diagram={"mobile ↔ tablet ↔ desktop"}>
+
+Delivered a fully responsive application within a tight deadline. The product reached about 1,000 monthly users internationally within its first year.
+
+</Decision>
+
+</Decisions>
+</Section>
+
+<Section number="04" title="RESULTS / KNOWN NUMBERS">
+<Metrics />
+</Section>
+
+<SystemSection />
+
+<Section number="06" title="WHAT I’D DO NEXT">
+
+I would separate the calculation rules into a well-tested domain module and improve the explanation of how each target is derived. Clear assumptions matter in a planning tool: the user should be able to understand the result and adjust their inputs.
+
+</Section>
