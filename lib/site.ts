@@ -12,7 +12,7 @@ export const site: SiteConfig = {
   github: "", // PLACEHOLDER: add https://github.com/<user>
   linkedin: "", // PLACEHOLDER: add https://www.linkedin.com/in/<user>
   cv: "", // PLACEHOLDER: drop the PDF in /public and set "/Osama-Khalifa-CV.pdf"
-  sourceRepo: "", // PLACEHOLDER: public repo of this site, shown as "SITE SOURCE ↗" in Contact
+  sourceRepo: "https://github.com/omaralsamahi175-gif/osama-khalifa-portfolio", // shown as "SITE SOURCE ↗" in Contact
   // Put the original at assets/source/portrait.(jpg|png) and run `npm run dither`.
   portrait: getProcessedImage("portrait"),
   portraitAlt: "Osama Khalifa",

@@ -185,7 +185,7 @@ The LCP element is the hero `<h1>`, with 131 ms of observed render delay. The si
 ### Content still needed
 
 - **Images:** portrait (high resolution), BuildMetrics, KACADEMIA (or blurred) and DADBOD screenshots, each with alt text. Add these to `assets/source/` and set captions and alt text in `lib/site.ts`.
-- **Links:** GitHub, LinkedIn, CV PDF, this site's repo, POS live link and repo, LinkedIn URLs for the four posts. GitHub and LinkedIn also go into JSON-LD `sameAs` automatically.
+- **Links:** GitHub, LinkedIn, CV PDF, POS live link and repo, LinkedIn URLs for the four posts. GitHub and LinkedIn also go into JSON-LD `sameAs` automatically.
 - **BuildMetrics numbers:** module count, query count, BOQ rows at 60fps, load time before and after. Add them to the MDX once they're real.
 - **Optional:** team size per case (`team:`), post bodies (these switch on read time).
 - **Deployment:** `NEXT_PUBLIC_SITE_URL`, the custom domain and the Vercel project. None of these are done yet.
