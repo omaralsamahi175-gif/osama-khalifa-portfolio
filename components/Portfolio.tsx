@@ -231,7 +231,7 @@ export function Portfolio({ cases, bodies, posts, assets, site }: Props) {
           }}
         />
         <main>
-          <Hero site={site} boot={boot} progress={progress} hover={hover} onHover={setHover} onNavigate={go} />
+          <Hero site={site} progress={progress} hover={hover} onHover={setHover} onNavigate={go} />
           <StackSection ref={bind("stack")} />
           <WorkSection ref={bind("work")} cases={cases} assets={assets} onOpen={openCase} />
           <LogSection ref={bind("log")} github={site.github} />

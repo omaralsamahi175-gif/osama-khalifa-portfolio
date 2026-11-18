@@ -36,7 +36,8 @@ export function Ruler({ progress, onHover, hover }: Props) {
             </i>
           ))}
         </div>
-        <div className="osk-ruler-marker" style={{ left: `${Math.min((value / 360) * 100, 99.5)}%` }}>
+        <div className="osk-ruler-marker" data-edge={value >= 330 ? "end" : value <= 30 ? "start" : undefined}
+          style={{ left: `clamp(3px, ${(value / 360) * 100}%, 100% - 3px)` }}>
           <span>{String(Math.round(value)).padStart(3, "0")}°</span>
         </div>
       </div>

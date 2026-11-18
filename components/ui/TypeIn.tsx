@@ -1,46 +1,68 @@
 "use client"
-import { useEffect, useState } from "react"
 
-type Props = { text: string; play: boolean; delay?: number; speed?: number }
+import { useEffect, useRef } from "react"
 
-/**
- * Types `text` in one character at a time (spec §5). The full string is laid out
- * invisibly underneath so surrounding layout never shifts, and screen readers get
- * the whole text at once. Once finished (or when `play` is false) later text
- * changes render instantly.
- */
-export function TypeIn({ text, play, delay = 0, speed = 20 }: Props) {
-  const [count, setCount] = useState(play ? 0 : Infinity)
+type Props = { text: string; play: boolean; delay?: number; cursor?: boolean }
+
+export function TypeIn({ text, play, delay = 0, cursor = true }: Props) {
+  const ref = useRef<HTMLSpanElement>(null)
+
   useEffect(() => {
-    if (!play) return
-    let timer = 0
-    let i = 0
-    const start = window.setTimeout(() => {
-      timer = window.setInterval(() => {
-        i += 1
-        if (i >= text.length) {
-          window.clearInterval(timer)
-          setCount(Infinity)
-        } else setCount(i)
-      }, speed)
-    }, delay)
-    return () => {
-      window.clearTimeout(start)
-      window.clearInterval(timer)
+    const element = ref.current
+    if (!element || !play) return
+    const letters = Array.from(element.querySelectorAll<HTMLElement>(".osk-typein-cell"))
+    const end = element.querySelector<HTMLElement>(".osk-typein-end")
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      element.dataset.reduced = ""
+      return
     }
-    // Plays once, on mount.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-  if (count === Infinity) return <>{text}</>
+
+    const speed = Math.min(18, 1180 / Math.max(1, letters.length))
+    const start = performance.now() + delay
+    let count = 0
+    let frame: number
+    function tick(now: number) {
+      if (!element || now < start) {
+        frame = requestAnimationFrame(tick)
+        return
+      }
+
+      delete letters[count]?.dataset.cursor
+      const next = Math.min(letters.length, Math.floor((now - start) / speed))
+      while (count < next) letters[count++].dataset.typed = ""
+      if (count < letters.length) {
+        if (cursor) letters[count].dataset.cursor = "active"
+        frame = requestAnimationFrame(tick)
+      } else if (end && cursor) {
+        end.dataset.cursor = "blink"
+      }
+    }
+
+    frame = requestAnimationFrame(tick)
+    return () => {
+      cancelAnimationFrame(frame)
+      letters.forEach((letter) => {
+        delete letter.dataset.typed
+        delete letter.dataset.cursor
+      })
+      if (end) delete end.dataset.cursor
+    }
+  }, [cursor, delay, play, text])
+
+  const tokens = text.split(/( +)/)
   return (
-    <span className="osk-typein">
-      <span className="osk-typein-ghost" aria-hidden="true">
-        {text}
-      </span>
-      <span className="osk-typein-text" aria-hidden="true">
-        {text.slice(0, count)}
-      </span>
+    <span className="osk-typein" ref={ref}>
       <span className="osk-sr">{text}</span>
+      <span aria-hidden="true">
+        {tokens.map((word, index) => (
+          <span className={word.startsWith(" ") ? "osk-typein-space" : "osk-typein-word"} key={index}>
+            {Array.from(word, (character, slot) => (
+              <span key={slot} className="osk-typein-cell">{character}</span>
+            ))}
+            {index === tokens.length - 1 && <span className="osk-typein-end" />}
+          </span>
+        ))}
+      </span>
     </span>
   )
 }

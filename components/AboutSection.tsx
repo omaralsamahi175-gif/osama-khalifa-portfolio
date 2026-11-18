@@ -4,6 +4,7 @@ import { Dot } from "./ui/Dot"
 import { Identity } from "./Identity"
 import { Reveal } from "./ui/Reveal"
 import { Strip } from "./ui/Strip"
+import { TitleIntro } from "./ui/TitleIntro"
 
 const TIMELINE = [
   ["2026.07", "BUILDMETRICS AI", "FULL STACK / CONTRACT"],
@@ -25,14 +26,11 @@ export const AboutSection = forwardRef<HTMLElement, { site: SiteConfig }>(functi
             </div>
           </Reveal>
           <Reveal>
-            <h2>
-              One engineer.
-              <br />
-              The whole picture<span className="osk-heading-dot">.</span>
-            </h2>
-            <p>
-              I’m Osama, a full stack engineer in Cairo. Computer Science at Tanta University, two years shipping production web apps. I like the unglamorous parts: data models, auth flows, the query that makes a page fast. Currently building at Zawraq and on BuildMetrics AI.
-            </p>
+            <TitleIntro
+              title={"One engineer.\nThe whole picture"}
+              accent="."
+              intro="I’m Osama, a full stack engineer in Cairo. Computer Science at Tanta University, two years shipping production web apps. I like the unglamorous parts: data models, auth flows, the query that makes a page fast. Currently building at Zawraq and on BuildMetrics AI."
+            />
             <div className="osk-timeline">
               {TIMELINE.map(([date, name, role]) => (
                 <div key={name}>

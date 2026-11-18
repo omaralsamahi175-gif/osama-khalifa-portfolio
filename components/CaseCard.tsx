@@ -1,6 +1,6 @@
 "use client"
 import Image from "next/image"
-import { motion } from "framer-motion"
+import { MatrixCard, MatrixCopy, MatrixText } from "./ui/MatrixCard"
 import { useState, type MouseEvent } from "react"
 import { CARD_COLORS } from "@/lib/layers"
 import type { CaseAsset, CaseMeta } from "@/lib/types"
@@ -32,7 +32,7 @@ export function CaseCard({ file, index, asset, featured = false, onOpen }: Props
     if (onOpen(slug)) e.preventDefault()
   }
   return (
-    <motion.article className={`osk-case-card ${featured ? "osk-case-featured" : ""}`} layoutId={`osk-case-${slug}`}>
+    <MatrixCard className={`osk-case-card ${featured ? "osk-case-featured" : ""}`} color={CARD_COLORS[index]} layoutId={`osk-case-${slug}`}>
       <a href={`/work/${slug}`} onClick={click} onPointerEnter={() => setIntent(true)} onFocus={() => setIntent(true)} aria-label={`Read ${title} case study`}>
         <div className="case-visual">
           {image ? (
@@ -53,8 +53,8 @@ export function CaseCard({ file, index, asset, featured = false, onOpen }: Props
           ) : (
             <>
               <div className="case-map-caption">
-                <span>FIG. {number} / SYSTEM MAP</span>
-                <span>OSK—0{index + 1}</span>
+                <span><MatrixText text={`FIG. ${number} / SYSTEM MAP`} /></span>
+                <span><MatrixText text={`OSK—0${index + 1}`} delay={640} /></span>
               </div>
               <div className="case-diagram">
                 {MAP_LABELS[index].map((label, i) => (
@@ -72,21 +72,21 @@ export function CaseCard({ file, index, asset, featured = false, onOpen }: Props
         </div>
         <div className="case-body">
           <span className="case-meta">
-            CASE {number} · {meta}
+            <MatrixText text={`CASE ${number} · ${meta}`} delay={650} />
           </span>
-          <h3>{title}</h3>
-          <p>{summary}</p>
+          <h3><MatrixText text={title} title delay={675} /></h3>
+          <MatrixCopy text={summary} />
           <div className="case-metrics">
             {file.cardMetrics.map((m) => (
-              <span key={m}>{m}</span>
+              <span key={m}><MatrixText text={m} delay={995} /></span>
             ))}
           </div>
           <div className="case-open">
-            <span>OPEN CASE FILE</span>
+            <span><MatrixText text="OPEN CASE FILE" delay={1040} /></span>
             <b aria-hidden="true">→</b>
           </div>
         </div>
       </a>
-    </motion.article>
+    </MatrixCard>
   )
 }

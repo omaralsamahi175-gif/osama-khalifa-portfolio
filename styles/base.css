@@ -1,5 +1,17 @@
-/* Next.js-only glue. Everything visual lives in the ported stylesheets. */
-html { background: #0e0f11; -webkit-text-size-adjust: 100%; }
+@font-face {
+  font-family: "JetBrains Mono Light";
+  src: url("../app/fonts/JetBrainsMono-Light.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+}
+html {
+  --gutter: clamp(24px, 4.5vw, 80px);
+  --section-y: clamp(96px, 12vh, 168px);
+  --card-pad: clamp(24px, 2vw, 32px);
+  background: #0e0f11;
+  -webkit-text-size-adjust: 100%;
+}
 body { margin: 0; background: #0e0f11; }
 
 /* Framer applied these inline on the component root. */
@@ -7,7 +19,7 @@ body { margin: 0; background: #0e0f11; }
 
 /* Framer "Other case files" list: horizontal stack, 1fr items (min 280px), 18px gap, wrapping. */
 .osk-work-list { display: flex; flex-wrap: wrap; gap: 18px; align-items: stretch; }
-.osk-work-item { flex: 1 1 280px; min-width: 280px; display: flex; flex-direction: column; }
+.osk-work-item { flex: 1 1 280px; min-width: min(280px, 100%); display: flex; flex-direction: column; }
 .osk-work-item > .osk-case-card { flex: 1; }
 .osk-case-card { width: 100%; height: auto; }
 .osk-note { position: relative; width: 100%; height: auto; }

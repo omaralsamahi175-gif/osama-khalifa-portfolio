@@ -4,6 +4,7 @@ import { Arrow } from "./ui/Arrow"
 import { Dot } from "./ui/Dot"
 import { Reveal } from "./ui/Reveal"
 import { Strip } from "./ui/Strip"
+import { ScrambleText } from "./ui/ScrambleText"
 
 type Props = { site: SiteConfig; copied: boolean; copyError: boolean; onCopy: () => void }
 
@@ -15,11 +16,7 @@ export const ContactSection = forwardRef<HTMLElement, Props>(function ContactSec
         <Strip number="06" title="CONTACT · OPEN A CHANNEL" extra="RECEIVING TRANSMISSIONS" />
         <Reveal>
           <div className="osk-contact-heading">
-            <h2>
-              Open a
-              <br />
-              channel<span className="osk-heading-dot">_</span>
-            </h2>
+            <h2><ScrambleText text={"Open a\nchannel"} accent="_" /></h2>
             <span className="osk-label">
               <Dot /> OPEN TO WORK
               <br />

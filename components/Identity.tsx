@@ -1,4 +1,5 @@
 "use client"
+
 import Image from "next/image"
 import { useReducedMotion } from "framer-motion"
 import { useEffect, useRef } from "react"
@@ -7,148 +8,122 @@ import { PixelMark } from "./ui/PixelMark"
 
 type Props = { image?: ProcessedImage; alt?: string; sharp?: boolean }
 
-/**
- * Hero "operator scan": a silver ordered-dither portrait (pre-rendered by
- * scripts/dither.mjs) with a false-colour layer revealed only inside the moving
- * scan frame. Pointer-driven on fine pointers, a slow Lissajous drift on touch.
- * `sharp` is the About-section variant: plain colour image, no scan.
- */
+const DESK_SRC = "/images/pixel-desk-knight.png"
+const DESK_SIZES = "(max-width: 478px) calc(100vw - 48px), (max-width: 767px) 430px, (max-width: 1360px) 36vw, 530px"
+const DESK_ALT = "Pixel art of a developer desk with a knight figurine and a coffee cup"
+const SCAN_WIDTH = 0.42
+const SCAN_HEIGHT = 0.38
+
 export function Identity({ image, alt, sharp = false }: Props) {
-  const wrap = useRef<HTMLDivElement>(null)
+  const photo = useRef<HTMLDivElement>(null)
   const scan = useRef<HTMLDivElement>(null)
-  const thermal = useRef<HTMLImageElement>(null)
+  const color = useRef<HTMLImageElement>(null)
   const leader = useRef<SVGSVGElement>(null)
   const reduced = useReducedMotion()
 
   useEffect(() => {
-    const el = wrap.current
-    if (!el || sharp) return
+    const frame = photo.current
+    if (!frame || reduced) return
+
+    const fine = window.matchMedia("(hover:hover) and (pointer:fine)").matches
     let raf = 0
     let active = false
-    let visible = !document.hidden
-    let last = 0
-    let x = 0.6
-    let y = 0.45
+    let x = 0.47
+    let y = 0.44
     let tx = x
     let ty = y
-    const fine = window.matchMedia("(hover:hover) and (pointer:fine)").matches
     let area = -1
-    // Spec §5: re-draw the dashed callout leader whenever the scan moves into a new area.
-    const redraw = (px: number, py: number) => {
-      const next = Math.min(2, Math.floor(px * 3)) + 3 * Math.min(2, Math.floor(py * 3))
-      if (next === area) return
-      const first = area === -1
-      area = next
-      const svg = leader.current
-      if (!svg || first) return
-      svg.classList.remove("osk-leader-draw")
-      void svg.getBoundingClientRect()
-      svg.classList.add("osk-leader-draw")
-    }
-    const place = (px: number, py: number) => {
-      redraw(px, py)
-      if (scan.current) scan.current.style.transform = `translate(${px * 100 - 25}%, ${py * 100 - 25}%)`
-      if (thermal.current) {
-        const left = 0.1 + (px - 0.25) * 0.57
-        const top = 0.16 + (py - 0.25) * 0.34
-        thermal.current.style.clipPath = `inset(${((top - 0.025) / 0.95) * 100}% ${(1 - (left + 0.57 - 0.075) / 0.85) * 100}% ${(1 - (top + 0.34 - 0.025) / 0.95) * 100}% ${((left - 0.075) / 0.85) * 100}%)`
-      }
-    }
-    const draw = (t: number) => {
-      if (!active || !visible) return
-      if (t - last < 1000 / 60) {
-        raf = requestAnimationFrame(draw)
-        return
-      }
-      last = t
+
+    function draw(time: number) {
+      if (!active || document.hidden) return
+
       if (!fine) {
-        tx = 0.5 + Math.sin(t / 4000) * 0.24
-        ty = 0.5 + Math.cos(t / 5300) * 0.2
+        tx = 0.5 + Math.sin(time / 4000) * 0.24
+        ty = 0.53 + Math.cos(time / 5300) * 0.16
       }
-      x += (tx - x) * (reduced ? 1 : 0.15)
-      y += (ty - y) * (reduced ? 1 : 0.15)
-      place(x, y)
+
+      x += (tx - x) * 0.15
+      y += (ty - y) * 0.15
+      const left = Math.max(0.025, Math.min(0.975 - SCAN_WIDTH, x - SCAN_WIDTH / 2))
+      const top = Math.max(0.14, Math.min(0.975 - SCAN_HEIGHT, y - SCAN_HEIGHT / 2))
+
+      if (scan.current) {
+        scan.current.style.transform = `translate(${left / SCAN_WIDTH * 100}%, ${top / SCAN_HEIGHT * 100}%)`
+      }
+      if (color.current) {
+        color.current.style.clipPath = `inset(${top * 100}% ${(1 - left - SCAN_WIDTH) * 100}% ${(1 - top - SCAN_HEIGHT) * 100}% ${left * 100}%)`
+      }
+
+      const nextArea = Math.floor(x * 3) + 3 * Math.floor(y * 3)
+      if (leader.current && nextArea !== area) {
+        if (area >= 0) {
+          leader.current.classList.remove("osk-leader-draw")
+          void leader.current.getBoundingClientRect()
+          leader.current.classList.add("osk-leader-draw")
+        }
+        area = nextArea
+      }
+
       raf = requestAnimationFrame(draw)
     }
-    const start = () => {
+
+    function update() {
       cancelAnimationFrame(raf)
-      if (active && visible && !reduced) raf = requestAnimationFrame(draw)
+      if (active && !document.hidden) raf = requestAnimationFrame(draw)
     }
+
+    function move(event: PointerEvent) {
+      if (!frame || !fine) return
+      const bounds = frame.getBoundingClientRect()
+      tx = (event.clientX - bounds.left) / bounds.width
+      ty = (event.clientY - bounds.top) / bounds.height
+    }
+
     const observer = new IntersectionObserver(([entry]) => {
       active = entry.isIntersecting
-      start()
+      update()
     })
-    observer.observe(el)
-    const onVisibility = () => {
-      visible = !document.hidden
-      start()
-    }
-    document.addEventListener("visibilitychange", onVisibility)
-    const move = (e: PointerEvent) => {
-      const r = el.getBoundingClientRect()
-      tx = Math.max(0.2, Math.min(0.75, (e.clientX - r.left) / r.width))
-      ty = Math.max(0.2, Math.min(0.75, (e.clientY - r.top) / r.height))
-      if (reduced) place(tx, ty)
-    }
-    el.addEventListener("pointermove", move)
-    place(x, y)
+    observer.observe(frame)
+    frame.addEventListener("pointermove", move)
+    document.addEventListener("visibilitychange", update)
     return () => {
       observer.disconnect()
       cancelAnimationFrame(raf)
-      document.removeEventListener("visibilitychange", onVisibility)
-      el.removeEventListener("pointermove", move)
+      frame.removeEventListener("pointermove", move)
+      document.removeEventListener("visibilitychange", update)
     }
-  }, [reduced, sharp])
+  }, [reduced])
 
-  const hasImage = !!image
   return (
-    <div className={`osk-identity ${sharp ? "osk-identity-sharp" : ""}`} ref={wrap}>
+    <div className={`osk-identity ${sharp ? "osk-identity-sharp" : "osk-identity-hero"}`}>
       <div className="osk-identity-grid" aria-hidden="true" />
-      {image ? (
-        sharp ? (
-          <Image src={image.color.src} width={image.color.width} height={image.color.height} alt={alt || "Osama Khalifa"} sizes="(max-width: 767px) 100vw, 40vw" />
-        ) : (
-          <>
-            {/* Pre-dithered at build time; `unoptimized` keeps the 1-bit pattern intact. */}
-            <Image src={image.silver.src} width={image.silver.width} height={image.silver.height} unoptimized priority className="osk-portrait-base" alt={alt || "Silver dithered portrait of Osama Khalifa"} />
-            {image.thermal && (
-              <Image ref={thermal} src={image.thermal.src} width={image.thermal.width} height={image.thermal.height} unoptimized className="osk-portrait-thermal" alt="" aria-hidden="true" />
-            )}
-          </>
-        )
-      ) : (
-        <div className="osk-monogram">
-          <PixelMark />
-        </div>
-      )}
       {!sharp && (
-        <>
+        <div className="osk-desk" ref={photo}>
+          <Image src={DESK_SRC} sizes={DESK_SIZES} quality={90} fill priority className="osk-desk-base" alt={DESK_ALT} />
+          <Image src={DESK_SRC} sizes={DESK_SIZES} quality={90} fill ref={color} className="osk-desk-color" alt="" aria-hidden="true" />
           <div className="osk-scan" ref={scan} aria-hidden="true">
-            <span className="osk-scan-corner" />
             <div className="osk-scan-color" />
-            <span className="osk-scan-label">OSK / {hasImage ? "IDENTITY" : "OPERATOR"} SCAN</span>
+            <span className="osk-scan-label">OSK / OPERATOR SCAN</span>
             <b>+</b>
           </div>
           <div className="osk-callout">
-            <span>{hasImage ? "identity verified" : "every layer connected"}</span>
+            <span>every layer connected</span>
             <svg ref={leader} viewBox="0 0 110 70" aria-hidden="true">
-              <path d="M0 0H45L105 65" />
+              <path d="M106 2H84L28 52" />
             </svg>
-            <i>+</i>
+            <i aria-hidden="true">+</i>
           </div>
-        </>
+        </div>
+      )}
+      {sharp && image ? (
+        <Image src={image.color.src} width={image.color.width} height={image.color.height}
+          alt={alt || "Osama Khalifa"} sizes="(max-width: 767px) 100vw, 40vw" />
+      ) : (
+        <div className="osk-monogram"><PixelMark /></div>
       )}
       <div className="osk-identity-meta">
-        <span>
-          30.04° N
-          <br />
-          31.24° E
-        </span>
-        <span>
-          OSK—00
-          <br />
-          {sharp ? "OPERATOR" : "SYSTEM / ONLINE"}
-        </span>
+        <span>30.04° N<br />31.24° E</span>
+        <span>{sharp ? "OSK—00" : "OSK-0"}<br />{sharp ? "OPERATOR" : "SYSTEM / ONLINE"}</span>
       </div>
     </div>
   )

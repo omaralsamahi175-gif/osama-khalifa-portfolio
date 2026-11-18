@@ -3,6 +3,7 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion"
 import { useEffect, useRef, type ReactNode } from "react"
 import { EASE } from "@/lib/layers"
 import type { CaseAsset, CaseMeta } from "@/lib/types"
+import { ScrambleText } from "./ui/ScrambleText"
 import { TypeIn } from "./ui/TypeIn"
 
 type Props = {
@@ -37,16 +38,16 @@ export function CaseView({ file, asset, body, email, onClose, onMove, standalone
     >
       <div className="osk-case-toolbar">
         <span>
-          <TypeIn text={counter} play={play} />
+          {play ? <TypeIn text={counter} play cursor={false} /> : counter}
         </span>
         <span>
-          <TypeIn text={heading} play={play} delay={counter.length * 20} />
+          {play ? <TypeIn text={heading} play cursor={false} delay={counter.length * 20} /> : heading}
         </span>
         {standalone ? (
           <a href="/#work">{close}</a>
         ) : (
           <button onClick={onClose}>
-            <TypeIn text={close} play={play} delay={(counter.length + heading.length) * 20} />
+            {play ? <TypeIn text={close} play cursor={false} delay={(counter.length + heading.length) * 20} /> : close}
           </button>
         )}
       </div>
@@ -61,7 +62,7 @@ export function CaseView({ file, asset, body, email, onClose, onMove, standalone
           >
             <div className="osk-case-intro">
               <span className="osk-label">{"// 01"} &nbsp; SUMMARY READOUT</span>
-              <h1>{file.title}</h1>
+              <h1><ScrambleText text={file.title} /></h1>
               <p className="osk-case-summary">{file.summary}</p>
               <div className={`osk-case-readout ${file.team ? "has-team" : ""}`}>
                 <div>

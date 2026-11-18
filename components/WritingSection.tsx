@@ -2,6 +2,7 @@ import { forwardRef } from "react"
 import type { Post } from "@/lib/types"
 import { Reveal } from "./ui/Reveal"
 import { Strip } from "./ui/Strip"
+import { ScrambleText } from "./ui/ScrambleText"
 import { WritingRow } from "./WritingRow"
 
 export const WritingSection = forwardRef<HTMLElement, { posts: Post[] }>(function WritingSection({ posts }, ref) {
@@ -10,11 +11,7 @@ export const WritingSection = forwardRef<HTMLElement, { posts: Post[] }>(functio
       <div className="osk-container">
         <Strip number="04" title="WRITING · NOTES ON BACKEND DESIGN" extra="OBSERVATIONS FROM PRODUCTION" />
         <Reveal className="osk-writing-intro">
-          <h2>
-            Notes from the layer
-            <br />
-            nobody watches<span className="osk-heading-dot">.</span>
-          </h2>
+          <h2><ScrambleText text={"Notes from the layer\nnobody watches"} accent="." /></h2>
         </Reveal>
         <div className="osk-writing-slot">
           {posts.map((post) => (

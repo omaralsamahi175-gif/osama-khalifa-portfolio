@@ -9,6 +9,7 @@ import { Glyph } from "./ui/Glyph"
 import { PixelMark } from "./ui/PixelMark"
 import { Reveal } from "./ui/Reveal"
 import { Strip } from "./ui/Strip"
+import { TitleIntro } from "./ui/TitleIntro"
 
 type LogRow = { id: number; layer: number; text: string; time: string }
 const ANNOUNCE_EVERY_MS = 30000
@@ -62,12 +63,11 @@ function RadarLog({ github }: { github?: string }) {
     <div className="osk-log-layout" ref={root}>
       <div className="osk-log-copy">
         <Reveal>
-          <h2>
-            Always
-            <br />
-            shipping<span className="osk-heading-dot">.</span>
-          </h2>
-          <p>Every few seconds the sweep passes a layer and logs something real I’ve built. No filler.</p>
+          <TitleIntro
+            title={"Always\nshipping"}
+            accent="."
+            intro="Every few seconds the sweep passes a layer and logs something real I’ve built. No filler."
+          />
           <div className="osk-actions">
             <a href="#work" className="osk-button">
               READ THE CASE STUDIES <span>→</span>

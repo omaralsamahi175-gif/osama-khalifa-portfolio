@@ -3,6 +3,7 @@ import type { CaseAsset, CaseMeta } from "@/lib/types"
 import { CaseCard } from "./CaseCard"
 import { Reveal } from "./ui/Reveal"
 import { Strip } from "./ui/Strip"
+import { ScrambleText } from "./ui/ScrambleText"
 
 type Props = { cases: CaseMeta[]; assets: CaseAsset[]; onOpen: (slug: string) => boolean }
 
@@ -15,11 +16,7 @@ export const WorkSection = forwardRef<HTMLElement, Props>(function WorkSection({
       <div className="osk-container">
         <Strip number="02" title="SELECTED WORK · 4 CASE FILES" extra="SHIPPED, NOT STAGED." />
         <Reveal className="osk-work-heading">
-          <h2>
-            Evidence,
-            <br />
-            across the stack<span className="osk-heading-dot">.</span>
-          </h2>
+          <h2><ScrambleText text={"Evidence,\nacross the stack"} accent="." /></h2>
           <span className="osk-label">
             SELECT A CASE FILE
             <br />↓ READ THE DECISIONS BEHIND THE BUILD

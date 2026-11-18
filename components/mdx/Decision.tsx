@@ -1,5 +1,6 @@
 import type { ReactNode } from "react"
 import { LAYERS } from "@/lib/layers"
+import { ScrambleText } from "../ui/ScrambleText"
 
 export function Decisions({ children }: { children: ReactNode }) {
   return <div className="osk-decisions">{children}</div>
@@ -18,7 +19,7 @@ export function Decision({ n, title, children }: { n: string; title: string; chi
       <span className="osk-label" style={{ color: LAYERS[index % 4].color }}>
         {n} / TECHNICAL DECISION
       </span>
-      <h3>{title}</h3>
+      <h3><ScrambleText text={title} /></h3>
       {children}
     </div>
   )

@@ -4,8 +4,9 @@ import { forwardRef, useRef, useState } from "react"
 import { LAYERS } from "@/lib/layers"
 import { Dot } from "./ui/Dot"
 import { Glyph } from "./ui/Glyph"
-import { Reveal } from "./ui/Reveal"
+import { MatrixCard, MatrixCopy, MatrixText } from "./ui/MatrixCard"
 import { Strip } from "./ui/Strip"
+import { TitleIntro } from "./ui/TitleIntro"
 
 /** 01 — four layer cards; on mobile a snap-scrolling pager. */
 export const StackSection = forwardRef<HTMLElement>(function StackSection(_, ref) {
@@ -16,14 +17,13 @@ export const StackSection = forwardRef<HTMLElement>(function StackSection(_, ref
     <section id="stack" ref={ref} className="osk-section osk-light">
       <div className="osk-container">
         <Strip number="01" title="THE STACK · FOUR LAYERS, ONE VIEW" extra="OSK-01 / 02 / 03 / 04 // COVERAGE 360°" />
-        <Reveal className="osk-section-intro">
-          <h2>
-            Frontend,
-            <br />
-            API, data, AI<span className="osk-heading-dot">.</span>
-          </h2>
-          <p>Most bugs don’t live where they show up. They live in the layer nobody owned. I work across all four, so nothing falls between them.</p>
-        </Reveal>
+        <div className="osk-section-intro">
+          <TitleIntro
+            title={"Frontend,\nAPI, data, AI"}
+            accent="."
+            intro="Most bugs don’t live where they show up. They live in the layer nobody owned. I work across all four, so nothing falls between them."
+          />
+        </div>
         <div
           className="osk-stack-grid"
           ref={grid}
@@ -33,18 +33,16 @@ export const StackSection = forwardRef<HTMLElement>(function StackSection(_, ref
           }}
         >
           {LAYERS.map((l, i) => (
-            <Reveal className="osk-stack-card" key={l.name}>
+            <MatrixCard className="osk-stack-card" color={l.color} key={l.name}>
               <div className="osk-card-coordinates">
-                <span>
-                  {l.dir} {l.deg}°
-                </span>
-                <span>{l.code}</span>
+                <MatrixText text={`${l.dir} ${l.deg}°`} />
+                <MatrixText text={l.code} delay={640} />
               </div>
               <div className="osk-glyph-scene">
                 <div className="osk-glyph">
                   <Glyph index={i} />
                 </div>
-                <span className="osk-tag">{l.tag}</span>
+                <span className="osk-tag"><MatrixText text={l.tag} delay={1040} /></span>
                 <svg viewBox="0 0 300 150" aria-hidden="true">
                   <path d="M235 30H210L177 74" />
                 </svg>
@@ -52,14 +50,14 @@ export const StackSection = forwardRef<HTMLElement>(function StackSection(_, ref
                   +
                 </span>
               </div>
-              <span className="osk-label">{l.tech}</span>
-              <h3>{l.name}</h3>
-              <p>{l.copy}</p>
+              <span className="osk-label"><MatrixText text={l.tech} delay={690} /></span>
+              <h3><MatrixText text={l.name} delay={675} title /></h3>
+              <MatrixCopy text={l.copy} />
               <div className="osk-card-footer">
-                <span>{l.metric}</span>
+                <MatrixText text={l.metric} delay={995} />
                 <Dot color={l.color} />
               </div>
-            </Reveal>
+            </MatrixCard>
           ))}
         </div>
         <div className="osk-stack-pager" aria-label="Stack layer pager">
