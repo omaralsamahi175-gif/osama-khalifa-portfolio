@@ -5,8 +5,13 @@ export function Decisions({ children }: { children: ReactNode }) {
   return <div className="osk-decisions">{children}</div>
 }
 
-/** One technical decision card. `n` is "01"…; its colour cycles through the four layers. */
-export function Decision({ n, title, diagram, children }: { n: string; title: string; diagram: string; children: ReactNode }) {
+/**
+ * One technical decision card. `n` is "01"…; its colour cycles through the four layers.
+ * Children are the Markdown paragraph followed by a fenced code block, which MDX
+ * renders as the card's `<pre><code>` diagram. No JS expressions are needed, so the
+ * content compiles with next-mdx-remote's default `blockJS`.
+ */
+export function Decision({ n, title, children }: { n: string; title: string; children: ReactNode }) {
   const index = Number(n) - 1
   return (
     <div className="osk-decision">
@@ -15,9 +20,6 @@ export function Decision({ n, title, diagram, children }: { n: string; title: st
       </span>
       <h3>{title}</h3>
       {children}
-      <pre>
-        <code>{diagram}</code>
-      </pre>
     </div>
   )
 }

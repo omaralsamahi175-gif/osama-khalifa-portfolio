@@ -23,27 +23,44 @@ An online education platform needed to connect teachers and students through cla
 <Section number="03" title="WHAT I BUILT">
 <Decisions>
 
-<Decision n="01" title="Ground the tutor in course content" diagram={"course content → chunks → embeddings\n→ retrieval → grounded answer"}>
+<Decision n="01" title="Ground the tutor in course content">
 
 Built a RAG tutor that retrieves course context before producing answers for students or questions for teachers. The retrieval step connects the response to the material being taught.
 
+```text
+course content → chunks → embeddings
+→ retrieval → grounded answer
+```
+
 </Decision>
 
-<Decision n="02" title="Model relationships explicitly" diagram={"application → Prisma → PostgreSQL"}>
+<Decision n="02" title="Model relationships explicitly">
 
 Built a relational PostgreSQL schema with Prisma and deployed it on a cloud server. Typed access keeps the application aligned with its database model.
 
+```text
+application → Prisma → PostgreSQL
+```
+
 </Decision>
 
-<Decision n="03" title="Protect the route boundary" diagram={"request → middleware → session → protected route"}>
+<Decision n="03" title="Protect the route boundary">
 
 Used NextAuth with middleware route protection. Authentication is checked before protected platform routes are reached.
 
+```text
+request → middleware → session → protected route
+```
+
 </Decision>
 
-<Decision n="04" title="Complete the account lifecycle" diagram={"account event → Nodemailer → SMTP → inbox"}>
+<Decision n="04" title="Complete the account lifecycle">
 
 Integrated transactional email through SMTP and Nodemailer for alerts, updates and password resets.
+
+```text
+account event → Nodemailer → SMTP → inbox
+```
 
 </Decision>
 

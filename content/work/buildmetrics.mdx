@@ -23,33 +23,55 @@ A construction project-controls SaaS had outgrown its React/Vite setup. The main
 <Section number="03" title="WHAT I BUILT">
 <Decisions>
 
-<Decision n="01" title="Move the application boundary" diagram={"57 routes → App Router → SSR auth → middleware"}>
+<Decision n="01" title="Move the application boundary">
 
 Migrated 57 routes to Next.js 14 App Router, with Supabase SSR authentication and middleware. The server owns access checks before a protected screen renders.
 
+```text
+57 routes → App Router → SSR auth → middleware
+```
+
 </Decision>
 
-<Decision n="02" title="Make the dashboard understandable" diagram={"views → services → data access\n          ↘ export hooks"}>
+<Decision n="02" title="Make the dashboard understandable">
 
 Split the ~3,100-line dashboard into modular views, calculation services and export hooks. Enforced the API/data-access boundary with strict TypeScript and ESLint.
 
+```text
+views → services → data access
+          ↘ export hooks
+```
+
 </Decision>
 
-<Decision n="03" title="Keep heavy work off the interface" diagram={"visible rows → virtual window\nexports → worker → download"}>
+<Decision n="03" title="Keep heavy work off the interface">
 
 Virtualized BOQ tables with TanStack React Virtual. Moved Excel and PDF processing into Web Workers so exports no longer compete with interface work on the main thread.
 
+```text
+visible rows → virtual window
+exports → worker → download
+```
+
 </Decision>
 
-<Decision n="04" title="Retrieve data together" diagram={"sequential requests → server retrieval → 1 round trip"}>
+<Decision n="04" title="Retrieve data together">
 
 Replaced an O(N) Supabase query waterfall with consolidated server-side retrieval. The client requests the result in one round trip.
 
+```text
+sequential requests → server retrieval → 1 round trip
+```
+
 </Decision>
 
-<Decision n="05" title="Put limits around AI" diagram={"request → account limit → generation → validation"}>
+<Decision n="05" title="Put limits around AI">
 
 Added grounded validation of AI-generated narratives and database-backed usage limits. Validation and account limits sit alongside the feature rather than relying on the prompt alone.
+
+```text
+request → account limit → generation → validation
+```
 
 </Decision>
 

@@ -62,7 +62,7 @@ The compiled body is a React node tree.
 
 Both surfaces render the same `CaseView`, so the markup matches. I checked this in the browser: the overlay and the page produce the same DOM, apart from how inline styles are serialized.
 
-To edit a case, change its MDX. Sections 02, 03 and 06 are Markdown inside `<Section>`. Decisions are `<Decision n title diagram>`. `<Metrics />` and `<SystemSection />` read the frontmatter.
+To edit a case, change its MDX. Sections 02, 03 and 06 are Markdown inside `<Section>`. Decisions are `<Decision n title>` with the paragraph followed by a ```` ```text ```` block for the diagram. The MDX has no JavaScript expressions, so it compiles under next-mdx-remote 6's default `blockJS`. `<Metrics />` and `<SystemSection />` read the frontmatter.
 
 ## How the radar works
 

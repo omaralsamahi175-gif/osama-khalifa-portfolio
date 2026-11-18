@@ -23,21 +23,33 @@ A diet-planning application needed to turn calorie calculations into a clear dai
 <Section number="03" title="WHAT I BUILT">
 <Decisions>
 
-<Decision n="01" title="Make the calculation flow explicit" diagram={"user inputs → TDEE → calorie target → diet plan"}>
+<Decision n="01" title="Make the calculation flow explicit">
 
 Built TDEE calculation and carb/keto-cycling logic into the planning experience. Users move from their inputs to a calorie and diet plan.
 
+```text
+user inputs → TDEE → calorie target → diet plan
+```
+
 </Decision>
 
-<Decision n="02" title="Keep state predictable" diagram={"inputs → Redux state → calculations → views"}>
+<Decision n="02" title="Keep state predictable">
 
 Built the interface with React and Redux, keeping the plan and the user's inputs coordinated across the application.
 
+```text
+inputs → Redux state → calculations → views
+```
+
 </Decision>
 
-<Decision n="03" title="Ship for small screens" diagram={"mobile ↔ tablet ↔ desktop"}>
+<Decision n="03" title="Ship for small screens">
 
 Delivered a fully responsive application within a tight deadline. The product reached about 1,000 monthly users internationally within its first year.
+
+```text
+mobile ↔ tablet ↔ desktop
+```
 
 </Decision>
 

@@ -23,21 +23,33 @@ A cashier and inventory system needed an interface that kept day-to-day transact
 <Section number="03" title="WHAT I BUILT">
 <Decisions>
 
-<Decision n="01" title="Type the interface" diagram={"typed data → React views → cashier workflow"}>
+<Decision n="01" title="Type the interface">
 
 Built the cashier and inventory interface with React and TypeScript, making the application data shapes explicit.
 
+```text
+typed data → React views → cashier workflow
+```
+
 </Decision>
 
-<Decision n="02" title="Make operational data legible" diagram={"sales + inventory → ECharts → dashboards"}>
+<Decision n="02" title="Make operational data legible">
 
 Used ECharts for sales and inventory dashboards, giving the system dedicated views for its operational data.
 
+```text
+sales + inventory → ECharts → dashboards
+```
+
 </Decision>
 
-<Decision n="03" title="Connect the workflows" diagram={"cashier ↔ inventory ↔ sales dashboard"}>
+<Decision n="03" title="Connect the workflows">
 
 Used Swiper navigation to move between the system's views while keeping the cashier and inventory experience cohesive.
+
+```text
+cashier ↔ inventory ↔ sales dashboard
+```
 
 </Decision>
 
