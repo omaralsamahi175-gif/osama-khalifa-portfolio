@@ -9,7 +9,7 @@ export const WritingSection = forwardRef<HTMLElement, { posts: Post[] }>(functio
   return (
     <section id="writing" ref={ref} className="osk-section osk-light">
       <div className="osk-container">
-        <Strip number="04" title="WRITING · NOTES ON BACKEND DESIGN" extra="OBSERVATIONS FROM PRODUCTION" />
+        <Strip number="03" title="WRITING · NOTES ON BACKEND DESIGN" extra="OBSERVATIONS FROM PRODUCTION" />
         <Reveal className="osk-writing-intro">
           <h2><ScrambleText text={"Notes from the layer\nnobody watches"} accent="." /></h2>
         </Reveal>

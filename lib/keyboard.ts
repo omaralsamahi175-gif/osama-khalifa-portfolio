@@ -1,5 +1,10 @@
 "use client"
 import { useEffect, useRef } from "react"
+import { NAV } from "./layers"
+
+export function getShortcutSection(key: string) {
+  return NAV.find(([, , shortcut]) => shortcut === key)?.[0]
+}
 
 /** Shortcuts never fire inside editable fields or with Cmd/Ctrl/Alt held. */
 export function shouldIgnoreKey(e: KeyboardEvent) {

@@ -5,19 +5,11 @@ export const LAYERS = [
   { dir: "W", deg: "270", name: "AI", code: "OSK-04", color: "#E2B341", tag: "grounded", tech: "RAG · RETRIEVAL · VALIDATION", copy: "AI features with guardrails. Grounded answers, usage limits, nothing made up.", metric: "RAG TUTOR · GROUNDED" },
 ] as const
 
-/** Two supplied log lines per layer; the radar alternates between them. */
-export const MESSAGES: readonly (readonly [string, string])[] = [
-  ["57 routes migrated to app router", "BOQ tables virtualized"],
-  ["error responses follow RFC 9457", "NextAuth routes protected by middleware"],
-  ["query waterfall replaced, 1 round trip", "KACADEMIA schema on PostgreSQL + Prisma"],
-  ["tutor answers grounded in course data", "usage limits enforced per account"],
-]
-
 export const NAV = [
-  ["work", "WORK", "1"],
-  ["stack", "STACK", "2"],
-  ["log", "LOG", "3"],
-  ["writing", "WRITING", "4"],
+  ["stack", "STACK", "1"],
+  ["work", "WORK", "2"],
+  ["writing", "WRITING", "3"],
+  ["about", "ABOUT", "4"],
   ["contact", "CONTACT", "5"],
 ] as const
 

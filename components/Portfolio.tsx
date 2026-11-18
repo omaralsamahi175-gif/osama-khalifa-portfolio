@@ -1,15 +1,13 @@
 "use client"
 import { LayoutGroup, useReducedMotion } from "framer-motion"
 import { useCallback, useEffect, useRef, useState, type ReactNode } from "react"
-import { useShortcuts } from "@/lib/keyboard"
-import { NAV } from "@/lib/layers"
+import { getShortcutSection, useShortcuts } from "@/lib/keyboard"
 import type { CaseAsset, CaseMeta, Post, SiteConfig } from "@/lib/types"
 import { AboutSection } from "./AboutSection"
 import { CaseView } from "./CaseView"
 import { ContactSection } from "./ContactSection"
 import { Footer } from "./Footer"
 import { Hero } from "./Hero"
-import { LogSection } from "./LogSection"
 import { MobileMenu } from "./MobileMenu"
 import { StackSection } from "./StackSection"
 import { Topbar } from "./Topbar"
@@ -37,7 +35,8 @@ export function Portfolio({ cases, bodies, posts, assets, site }: Props) {
   const copyTimer = useRef(0)
   const [progress, setProgress] = useState(0)
   const [hover, setHover] = useState<number | null>(null)
-  const [active, setActive] = useState("work")
+  const [active, setActive] = useState("stack")
+  const [topbarHeight, setTopbarHeight] = useState(0)
   const [copied, setCopied] = useState(false)
   const [copyError, setCopyError] = useState(false)
   const [menu, setMenu] = useState(false)
@@ -116,39 +115,60 @@ export function Portfolio({ cases, bodies, posts, assets, site }: Props) {
     }
   }, [reduced])
 
-  // Scroll progress (drives the hero ruler) and active-section tracking.
+  // The activation line sits below the sticky bar and the anchor offset.
   useEffect(() => {
+    if (!topbarHeight) return
     let pending = 0
+    let atBottom = false
+    let sectionAtLine = "stack"
+    let observer: IntersectionObserver | undefined
+
     const update = () => {
       if (pending) return
       pending = requestAnimationFrame(() => {
         pending = 0
         const el = root.current
         if (!el) return
-        const r = el.getBoundingClientRect()
+        const bounds = el.getBoundingClientRect()
         const total = el.offsetHeight - window.innerHeight
-        setProgress(total > 0 ? Math.max(0, Math.min(1, -r.top / total)) : 0)
+        setProgress(total > 0 ? Math.max(0, Math.min(1, -bounds.top / total)) : 0)
+        const reachedBottom = bounds.bottom <= window.innerHeight + 1
+        if (reachedBottom !== atBottom) {
+          atBottom = reachedBottom
+          setActive(atBottom ? "contact" : sectionAtLine)
+        }
       })
     }
+
+    const observe = () => {
+      observer?.disconnect()
+      const line = Math.min(topbarHeight + 24, window.innerHeight - 1)
+      observer = new IntersectionObserver((entries) => {
+        const section = entries.find((entry) => entry.isIntersecting)
+        if (section) {
+          sectionAtLine = section.target.id === "top" ? "stack" : section.target.id
+          if (!atBottom) setActive(sectionAtLine)
+        }
+      }, { rootMargin: `-${line}px 0px -${window.innerHeight - line - 1}px 0px` })
+
+      const hero = root.current?.querySelector("#top")
+      if (hero) observer.observe(hero)
+      Object.values(sections.current).forEach((section) => {
+        if (section) observer?.observe(section)
+      })
+      update()
+    }
+
     window.addEventListener("scroll", update, { passive: true })
-    window.addEventListener("resize", update)
-    update()
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting && e.target.id !== "about") setActive(e.target.id)
-        })
-      },
-      { rootMargin: "-20% 0px -55% 0px", threshold: 0 },
-    )
-    Object.values(sections.current).forEach((el) => el && observer.observe(el))
+    window.addEventListener("resize", observe)
+    observe()
     return () => {
       window.removeEventListener("scroll", update)
-      window.removeEventListener("resize", update)
+      window.removeEventListener("resize", observe)
       cancelAnimationFrame(pending)
-      observer.disconnect()
+      observer?.disconnect()
     }
-  }, [])
+  }, [topbarHeight])
 
   // Back/forward between "/" and "/work/<slug>" opens or closes the overlay.
   useEffect(() => {
@@ -203,10 +223,10 @@ export function Portfolio({ cases, bodies, posts, assets, site }: Props) {
       e.preventDefault()
       setMenu((m) => !m)
     }
-    const match = NAV.find((n) => n[2] === e.key)
-    if (match) {
+    const section = getShortcutSection(e.key)
+    if (section) {
       e.preventDefault()
-      go(match[0])
+      go(section)
     }
   })
 
@@ -225,6 +245,7 @@ export function Portfolio({ cases, bodies, posts, assets, site }: Props) {
           active={active}
           boot={boot}
           onNavigate={go}
+          onHeightChange={setTopbarHeight}
           onOpenMenu={() => {
             priorFocus.current = document.activeElement as HTMLElement
             setMenu(true)
@@ -234,7 +255,6 @@ export function Portfolio({ cases, bodies, posts, assets, site }: Props) {
           <Hero site={site} progress={progress} hover={hover} onHover={setHover} onNavigate={go} />
           <StackSection ref={bind("stack")} />
           <WorkSection ref={bind("work")} cases={cases} assets={assets} onOpen={openCase} />
-          <LogSection ref={bind("log")} github={site.github} />
           <WritingSection ref={bind("writing")} posts={posts} />
           <AboutSection ref={bind("about")} site={site} />
           <ContactSection ref={bind("contact")} site={site} copied={copied} copyError={copyError} onCopy={copyEmail} />

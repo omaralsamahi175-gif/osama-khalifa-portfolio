@@ -29,15 +29,14 @@ app/
 components/
   Portfolio.tsx                 client shell: nav state, scroll progress, overlay <dialog>, shortcuts
   Topbar · Hero · Ruler · Identity
-  StackSection · WorkSection · LogSection · WritingSection · AboutSection · ContactSection · Footer
+  StackSection · WorkSection · WritingSection · AboutSection · ContactSection · Footer
   CaseCard · WritingRow · CaseView · CaseStandalone · ProductScreen · Architecture · MobileMenu
   SocialCard.tsx                OG artwork (Satori-compatible port of the Framer SocialCard)
   ui/                           Dot, Arrow, Glyph, Strip, Reveal, PixelMark, TypeIn
   mdx/                          components the case-study MDX uses: Section, Decisions/Decision, Metrics, SystemSection
 lib/
-  radar.ts                      sweep drawing + visibility-gated rAF loop
   dither.mjs                    Bayer ordered dither + false-colour ramp (build time only)
-  clock.ts                      Cairo header clock, visitor local time
+  clock.ts                      Cairo header clock
   keyboard.ts                   shortcut guard + useShortcuts hook
   content.tsx                   reads content/, compiles MDX (next-mdx-remote/rsc)
   site.ts                       email, social links, CV, case links (formerly Framer property controls)
@@ -66,22 +65,6 @@ Both surfaces render the same `CaseView`, so the markup matches. I checked this 
 
 To edit a case, change its MDX. Sections 02, 03 and 06 are Markdown inside `<Section>`. Decisions are `<Decision n title>` with the paragraph followed by a ```` ```text ```` block for the diagram. The MDX has no JavaScript expressions, so it compiles under next-mdx-remote 6's default `blockJS`. `<Metrics />` and `<SystemSection />` read the frontmatter.
 
-## How the radar works
-
-Two layers, in `components/LogSection.tsx` and `lib/radar.ts`:
-
-1. **Static compass (SVG, 600×600 viewBox):** four rings (r 55/110/165/221), crosshairs and diagonals, 72 ticks (every 9th one longer) and eight degree labels. It never repaints.
-2. **Moving sweep (canvas, 600×600 backing store over the SVG):** each frame clears the canvas and draws a conic gradient. The gradient is transparent except for a faint green band just behind the sweep angle, which forms the trailing wedge. A 1px line at the angle sits on top.
-
-Timing: one revolution takes **8 s of active time**. `elapsed` only advances while the radar is visible. An IntersectionObserver (threshold 0.1) and `visibilitychange` stop the rAF loop. Each frame's delta is capped at 40 ms, so coming back never jumps ahead, and frames are capped at about 60 fps.
-Every 2 s the sweep enters a new quarter (`floor(elapsed / 2000)`) and calls `onQuarter(layer)` for N, E, S, W in turn. That call:
-
-- lights the matching node glyph in its layer colour for 1.5 s;
-- prepends the layer's next supplied log line, which alternates between its two messages, stamped with the visitor's local time. Five rows are kept, and CSS hides rows past the third on mobile;
-- updates a polite live region, at most once every 30 s.
-
-With `prefers-reduced-motion`, the loop never starts and the radar stays static.
-
 ## How the dither works
 
 All dithering happens at build time. `scripts/dither.mjs` runs before `dev` and `build`, and you can run it alone with `npm run dither`. It reads `assets/source/` and writes `public/generated/` plus `lib/generated/images.json`, which the app imports.
@@ -106,7 +89,7 @@ With no files in `assets/source/`, every surface falls back to the OS pixel mono
 
 ## Keyboard
 
-`1`–`5` jump to Work, Stack, Log, Writing and Contact. `C` copies the email. `=` opens the menu. `Esc` closes the menu or case. `←`/`→` change case. Shortcuts are ignored in editable fields and when ⌘/Ctrl/Alt is held.
+`1`–`5` jump to Stack, Work, Writing, About and Contact. `C` copies the email. `=` opens the menu. `Esc` closes the menu or case. `←`/`→` change case. Shortcuts are ignored in editable fields and when ⌘/Ctrl/Alt is held.
 
 ## What changed from Framer, and why
 
@@ -162,14 +145,10 @@ The port follows the Framer version wherever the build spec and Framer disagree.
 | Frontend footer `ROUTES MIGRATED 57 · NEXT.JS 14` | `57 ROUTES MIGRATED · NEXT.JS 14` |
 | Featured chip `O(N) QUERIES → 1` | `1 ROUND TRIP` |
 | POS label `CASE 04 · 2024` | `CASE 04 · PRODUCT BUILD · 2024` |
-| Log header `BLIND SPOTS 0 / STATUS: ALL LAYERS COVERED ●` | `OSK-00 // ALL LAYERS COVERED`; "BLIND SPOTS: 0" sits under the radar |
-| Log rows type in at 15ms/char, single line with dot leaders | Row slides in (350ms); direction stacked over message; no leaders |
-| Log order in the second round N, S, E, W | N, E, S, W, so every row matches the sweep's actual position |
 | Timeline `BUILDMETRICS AI · FULL STACK (CONTRACT)` | Name with role on a second line |
 | Case top bar middle: name + image count | `NAME / FIELD NOTES` |
 | Case sections: separate "Before / after" and "Screens" | `RESULTS / KNOWN NUMBERS`; screens and architecture share `05 SCREEN / SYSTEM` |
 | Syntax-highlighted code snippets in decision cards | Single-colour flow diagrams (the content is flows, not code) |
-| Mobile radar 300px | 350px max |
 
 ### Performance numbers
 

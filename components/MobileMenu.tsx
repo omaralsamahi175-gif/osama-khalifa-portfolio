@@ -1,7 +1,7 @@
 import { NAV } from "@/lib/layers"
 import { PixelMark } from "./ui/PixelMark"
 
-type Props = { onClose: () => void; onNavigate: (id: string) => void }
+type Props = { onClose: () => void; onNavigate?: (id: string) => void }
 
 export function MobileMenu({ onClose, onNavigate }: Props) {
   return (
@@ -14,8 +14,9 @@ export function MobileMenu({ onClose, onNavigate }: Props) {
         {NAV.map(([id, label, key]) => (
           <a
             key={id}
-            href={`#${id}`}
+            href={`${onNavigate ? "" : "/"}#${id}`}
             onClick={(e) => {
+              if (!onNavigate || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return
               e.preventDefault()
               onNavigate(id)
             }}

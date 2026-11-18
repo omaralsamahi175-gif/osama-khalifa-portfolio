@@ -11,9 +11,6 @@ const cairo = new Intl.DateTimeFormat("en-GB", {
 
 export const formatCairo = (date = new Date()) => `${cairo.format(date)} CAIRO`
 
-/** Visitor's local clock, used for log timestamps. */
-export const localTime = () => new Date().toLocaleTimeString([], { hour12: false })
-
 /**
  * Header clock in Cairo time. Renders "CAIRO / EGYPT" on the server and until
  * mount (no hydration mismatch), ticks every second, pauses while the tab is hidden.

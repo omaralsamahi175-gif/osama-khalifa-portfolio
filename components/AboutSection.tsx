@@ -17,7 +17,7 @@ export const AboutSection = forwardRef<HTMLElement, { site: SiteConfig }>(functi
   return (
     <section id="about" ref={ref} className="osk-section osk-about">
       <div className="osk-container">
-        <Strip number="05" title="ABOUT · OPERATOR" extra="CAIRO, EGYPT / 30.04° N 31.24° E" />
+        <Strip number="04" title="ABOUT · OPERATOR" extra="CAIRO, EGYPT / 30.04° N 31.24° E" />
         <div className="osk-about-layout">
           <Reveal>
             <Identity image={site.portrait} alt={site.portraitAlt} sharp />

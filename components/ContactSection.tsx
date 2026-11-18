@@ -13,7 +13,7 @@ export const ContactSection = forwardRef<HTMLElement, Props>(function ContactSec
   return (
     <section id="contact" ref={ref} className="osk-section osk-contact">
       <div className="osk-container">
-        <Strip number="06" title="CONTACT · OPEN A CHANNEL" extra="RECEIVING TRANSMISSIONS" />
+        <Strip number="05" title="CONTACT · OPEN A CHANNEL" extra="RECEIVING TRANSMISSIONS" />
         <Reveal>
           <div className="osk-contact-heading">
             <h2><ScrambleText text={"Open a\nchannel"} accent="_" /></h2>
