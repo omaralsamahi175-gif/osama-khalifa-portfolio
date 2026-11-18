@@ -17,6 +17,15 @@ const mono = localFont({
   variable: "--font-mono",
   adjustFontFallback: false,
 })
+// Headline weight (300), subset to the same characters as the Regular subset.
+const heading = localFont({
+  src: "./fonts/JetBrainsMono-Light-subset.woff2",
+  weight: "300",
+  style: "normal",
+  display: "swap",
+  variable: "--font-heading",
+  adjustFontFallback: false,
+})
 const pixel = localFont({
   src: "./fonts/DepartureMono-subset.woff2",
   weight: "400",
@@ -54,7 +63,7 @@ const personJsonLd = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" className={`${mono.variable} ${pixel.variable}`}>
+    <html lang="en" className={`${mono.variable} ${heading.variable} ${pixel.variable}`}>
       <body>
         {children}
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }} />

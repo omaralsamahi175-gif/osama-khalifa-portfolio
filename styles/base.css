@@ -1,10 +1,4 @@
-@font-face {
-  font-family: "JetBrains Mono Light";
-  src: url("../app/fonts/JetBrainsMono-Light.woff2") format("woff2");
-  font-style: normal;
-  font-weight: 300;
-  font-display: swap;
-}
+/* Fonts load through next/font in app/layout.tsx (--font-mono, --font-pixel, --font-heading). */
 html {
   --gutter: clamp(24px, 4.5vw, 80px);
   --section-y: clamp(96px, 12vh, 168px);

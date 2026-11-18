@@ -36,7 +36,7 @@
 .osk {
   --ink: #e4e4e0;
   --body-copy: rgba(228, 228, 224, .62);
-  --heading-font: "JetBrains Mono Light", var(--font-mono), monospace;
+  --heading-font: var(--font-heading), var(--font-mono), monospace;
   --scramble-ink: #7bc86c;
   --topbar-height: 105px;
 }
@@ -91,6 +91,19 @@
 .osk .osk-card-footer > .osk-scramble,
 .osk .case-open > span {
   color: color-mix(in srgb, var(--ink) 55%, transparent);
+}
+/* On the light "paper" sections 55% ink is #757574 on #e9e9e6 (3.79:1). 64% keeps the
+   same muted look while clearing WCAG AA's 4.5:1 for small text. Dark sections keep 55%. */
+.osk .osk-light :is(.osk-hero-meta, .osk-identity-meta, .osk-scan-label,
+  .osk-stack-foot, .osk-radar-caption, .osk-log-head, .osk-timeline, .osk-about-id,
+  .osk-footer, .osk-architecture-label, figcaption) {
+  opacity: .64;
+}
+.osk .osk-light :is(.osk-label, .osk-card-coordinates, .case-meta, .case-map-caption),
+.osk .osk-light .osk-strip > span,
+.osk .osk-light .osk-card-footer > .osk-scramble,
+.osk .osk-light .case-open > span {
+  color: color-mix(in srgb, var(--ink) 64%, transparent);
 }
 .osk .osk-button:not(.secondary) {
   background: #e4e4e0 !important;
