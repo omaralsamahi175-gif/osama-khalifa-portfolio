@@ -11,7 +11,9 @@ npm run build      # static build (also runs the dither script first)
 npm start
 ```
 
-Set `NEXT_PUBLIC_SITE_URL` (for example `https://osamakhalifa.dev`) in production. Canonical URLs, Open Graph URLs, the sitemap and robots.txt all use it.
+**Live:** https://osama-khalifa-portfolio.vercel.app (Vercel; every push to `main` redeploys).
+
+Set `NEXT_PUBLIC_SITE_URL` to the production address in Vercel's project settings (currently `https://osama-khalifa-portfolio.vercel.app`). Canonical URLs, Open Graph URLs, the sitemap and robots.txt all use it.
 
 ## Structure
 
@@ -171,7 +173,18 @@ The port follows the Framer version wherever the build spec and Framer disagree.
 
 ### Performance numbers
 
-Mobile Lighthouse 13.5, production build served locally. The reports are in `lighthouse/`.
+Mobile Lighthouse 13.5, measured on 2026-11-18. The reports are in `lighthouse/`: `live-*` for the production site, the rest for a local production build.
+
+**Production (https://osama-khalifa-portfolio.vercel.app):**
+
+| Page | Throttling | Perf | A11y | BP | SEO | FCP | LCP | CLS | TBT | JS (transfer) |
+|---|---|---|---|---|---|---|---|---|---|---|
+| `/` | simulated (default) | 98 | 100 | 100 | 100 | 1.3 s | 2.2 s | 0 | 60 ms | 146 KB |
+| `/` | applied | 99 | 100 | 100 | 100 | 1.7 s | 1.7 s | 0 | 0 ms | 146 KB |
+| `/work/buildmetrics` | simulated | 100 | 100 | 100 | 100 | 1.0 s | 1.4 s | 0 | 0 ms | 136 KB |
+| `/work/buildmetrics` | applied | 99 | 100 | 100 | 100 | 1.7 s | 1.7 s | 0 | 0 ms | 136 KB |
+
+**Local production build (`next start`):**
 
 | Page | Throttling | Perf | A11y | BP | SEO | FCP | LCP | CLS | TBT | JS (transfer) |
 |---|---|---|---|---|---|---|---|---|---|---|
@@ -180,7 +193,9 @@ Mobile Lighthouse 13.5, production build served locally. The reports are in `lig
 | `/work/buildmetrics` | simulated | 99 | 100 | 100 | 100 | 0.8 s | 2.1 s | 0 | 0 ms | 132 KB |
 | `/work/buildmetrics` | applied | 100 | 100 | 100 | 100 | 1.5 s | 1.5 s | 0 | 0 ms | 132 KB |
 
-The LCP element is the hero `<h1>`, with 131 ms of observed render delay. The simulated model also counts every script requested before that paint, which on localhost is all of them. It reports 2.1–2.3 s, above the spec's 2.0 s target. Under applied throttling, LCP is 1.5 s. Lowering the simulated number would mean dropping framer-motion (about 37 KB), which drives the approved layout and overlay motion. Re-run on the deployed URL: real CDN latency changes both numbers.
+Against the spec: every category is 95+, CLS is under 0.05 and JS is under 150 KB on every run. LCP is under 2.0 s in every run except the home page under simulated throttling (2.2 s).
+
+The home LCP element is the hero `<h1>`. The simulated model counts every script requested before that paint against it. Under applied throttling, which really slows the network and CPU, the same page reaches LCP in 1.7 s in production. Lowering the simulated number would mean dropping framer-motion (about 37 KB), which drives the approved layout and overlay motion. Case pages, which have no boot sequence, reach LCP in 1.4 s simulated in production.
 
 ### Content still needed
 
@@ -188,4 +203,4 @@ The LCP element is the hero `<h1>`, with 131 ms of observed render delay. The si
 - **Links:** GitHub, LinkedIn, CV PDF, POS live link and repo, LinkedIn URLs for the four posts. GitHub and LinkedIn also go into JSON-LD `sameAs` automatically.
 - **BuildMetrics numbers:** module count, query count, BOQ rows at 60fps, load time before and after. Add them to the MDX once they're real.
 - **Optional:** team size per case (`team:`), post bodies (these switch on read time).
-- **Deployment:** `NEXT_PUBLIC_SITE_URL`, the custom domain and the Vercel project. None of these are done yet.
+- **Custom domain:** the site runs on Vercel at https://osama-khalifa-portfolio.vercel.app. To move it to a domain such as `osamakhalifa.dev`, add the domain in Vercel and change `NEXT_PUBLIC_SITE_URL` to match.
